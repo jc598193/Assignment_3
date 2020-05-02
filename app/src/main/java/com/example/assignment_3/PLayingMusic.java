@@ -1,29 +1,29 @@
 package com.example.assignment_3;
 
 import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 
-class PLayingMusic {
+class AudioPlay {
 
-    private MediaPlayer background;
+    public static MediaPlayer mediaPlayer;
 
-    PLayingMusic(Context context){
-        background = MediaPlayer.create(context, R.raw.background);
+    private static SoundPool soundPool;
 
-    }
-    void playMusic(){
-        if(!background.isPlaying()){
-            background.setLooping(true);
-            background.start();
+    public static boolean isplayingAudio = false;
+
+    public static void playAudio(Context c,int id){
+        mediaPlayer = MediaPlayer.create(c,id);
+        soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 100);
+        if(!mediaPlayer.isPlaying())
+        {
+            isplayingAudio=true;
+            mediaPlayer.start();
         }
     }
-
-    void stopMusic(){
-        if(background.isPlaying()){
-            background.stop();
-            background.release();
-            background = null;
-        }
-
+    public static void stopAudio(){
+        isplayingAudio=false;
+        mediaPlayer.stop();
     }
 }

@@ -18,21 +18,20 @@ public class LandingPage extends AppCompatActivity {
 
 
     SharedPreferences preferences;
-    PLayingMusic pLayingMusic;;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing_page);
 
-        preferences = getSharedPreferences("pref", MODE_PRIVATE);
-        preferences.edit()
-                .putBoolean("play_sound", true)
-                .putBoolean("play_music", true)
-                .putInt("volume", 15)
-                .putInt("music", R.raw.background)
-                .apply();
+//        preferences = getSharedPreferences("pref", MODE_PRIVATE);
+//        preferences.edit()
+////                .putBoolean("play_sound", true)
+////                .putBoolean("play_music", true)
+//                .putInt("volume", 15)
+////                .putInt("music", R.raw.background)
+//                .apply();
 
-        pLayingMusic = new PLayingMusic(this);
+
 
 
 
@@ -41,20 +40,17 @@ public class LandingPage extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        preferences = getSharedPreferences("pref", MODE_PRIVATE);
         int volume = preferences.getInt("volume", 15);
         boolean play_music = preferences.getBoolean("play_music", true);
-        pLayingMusic = new PLayingMusic(this);
+
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
 
         if (play_music) {
-            pLayingMusic.playMusic();
+            AudioPlay.playAudio(getApplicationContext(), R.raw.background);
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-    }
 }

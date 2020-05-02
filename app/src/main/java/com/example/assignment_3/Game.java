@@ -31,7 +31,8 @@ public class Game extends AppCompatActivity {
     private int  question_number;
     private String correct_answer;
     UserDatabase userDatabase;
-    MediaPlayer correct, wrong;
+    MediaPlayer correct_sound, wrong_sound;
+    boolean open_sound, correct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +55,8 @@ public class Game extends AppCompatActivity {
         int saved_score = preferences.getInt("score", 0);
         score.setText(String.valueOf(saved_score));
 
-        boolean open_sound = preferences.getBoolean("play_sound", true);
 
-        if (open_sound) {
-            correct = MediaPlayer.create(getApplicationContext(), R.raw.correct_effect);
-            wrong = MediaPlayer.create(getApplicationContext(), R.raw.wrong_effect);
-        }
+
 
 
 
@@ -67,7 +64,8 @@ public class Game extends AppCompatActivity {
             @Override
             public void onClick(View v) {
             if (answer1.getText() == correct_answer){
-                correct.start();
+                correct = true;
+                controlSound();
                 Toast.makeText(Game.this, "correct", Toast.LENGTH_SHORT).show();
                 mScore = mScore + 1;
                 updateScore(mScore);
@@ -75,7 +73,8 @@ public class Game extends AppCompatActivity {
 
             }else{
                 Toast.makeText(Game.this, "incorrect", Toast.LENGTH_SHORT).show();
-                wrong.start();
+                correct = false;
+                controlSound();
                 updateQuestion();
             }
             }
@@ -87,14 +86,16 @@ public class Game extends AppCompatActivity {
             public void onClick(View v) {
             if (answer2.getText() == correct_answer){
                 Toast.makeText(Game.this, "correct", Toast.LENGTH_SHORT).show();
-                correct.start();
+                correct =true;
+                controlSound();
                 mScore = mScore + 1;
                 updateScore(mScore);
                 updateQuestion();
 
             }else{
                 Toast.makeText(Game.this, "incorrect", Toast.LENGTH_SHORT).show();
-                wrong.start();
+                correct = false;
+                controlSound();
                 updateQuestion();
             }
             }
@@ -106,14 +107,16 @@ public class Game extends AppCompatActivity {
             public void onClick(View v) {
             if (answer3.getText() == correct_answer){
                 Toast.makeText(Game.this, "correct", Toast.LENGTH_SHORT).show();
-                correct.start();
+                correct = true;
+                controlSound();
                 mScore = mScore + 1;
                 updateScore(mScore);
                 updateQuestion();
 
             }else{
                 Toast.makeText(Game.this, "incorrect", Toast.LENGTH_SHORT).show();
-                wrong.start();
+                correct = false;
+                controlSound();
                 updateQuestion();
             }
             }
@@ -125,14 +128,16 @@ public class Game extends AppCompatActivity {
             public void onClick(View v) {
             if (answer4.getText() == correct_answer){
                 Toast.makeText(Game.this, "correct", Toast.LENGTH_SHORT).show();
-                correct.start();
+                correct = true;
+                controlSound();
                 mScore = mScore + 1;
                 updateScore(mScore);
                 updateQuestion();
 
             }else{
                 Toast.makeText(Game.this, "incorrect", Toast.LENGTH_SHORT).show();
-                wrong.start();
+                correct = false;
+                controlSound();
                 updateQuestion();
             }
             }
@@ -148,6 +153,7 @@ public class Game extends AppCompatActivity {
         return true;
     }
 
+    // Menu controller
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -172,6 +178,8 @@ public class Game extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    // Question Controller
     private void updateQuestion(){
         data = new QuestionDatabase();
         if (question_number < 10){
@@ -189,10 +197,13 @@ public class Game extends AppCompatActivity {
 
     }
 
+    // Score update
     private void updateScore(int point){
         score.setText(String.valueOf(point));
     }
 
+
+    // Update Score in Database
     void updateUserScore() {
         preferences = getSharedPreferences("pref", MODE_PRIVATE);
         String name = preferences.getString("name", "");
@@ -204,6 +215,7 @@ public class Game extends AppCompatActivity {
     }
 
 
+    // Dialog when question is running out
     void finishedAlert(){
         AlertDialog.Builder builder1 = new AlertDialog.Builder(Game.this);
         builder1.setMessage("You are completed the game. Do you want to play again?");
@@ -231,6 +243,23 @@ public class Game extends AppCompatActivity {
 
         AlertDialog alert11 = builder1.create();
         alert11.show();
+    }
+
+    // Play correct or wrong sound
+    void controlSound(){
+        preferences = getSharedPreferences("pref", MODE_PRIVATE);
+        open_sound = preferences.getBoolean("play_sound", true);
+
+        if (open_sound) {
+            correct_sound = MediaPlayer.create(getApplicationContext(), R.raw.correct_effect);
+            wrong_sound = MediaPlayer.create(getApplicationContext(), R.raw.wrong_effect);
+            if (correct){
+                correct_sound.start();
+            }else{
+                wrong_sound.start();
+            }
+
+        }
     }
 
     @Override

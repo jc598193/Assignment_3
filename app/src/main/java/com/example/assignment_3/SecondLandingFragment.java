@@ -16,7 +16,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class SecondLandingFragment extends Fragment {
 
-    private Button play;
+    private Button play, high_scores, setting;
     private TextView welcome;
 
     SharedPreferences preferences;
@@ -53,6 +53,26 @@ public class SecondLandingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent1 = new Intent(getActivity(), Game.class);
+                startActivity(intent1);
+
+            }
+        });
+
+        high_scores = view.findViewById(R.id.high_scores);
+        high_scores.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(getActivity(), HighScores.class);
+                startActivity(intent1);
+
+            }
+        });
+
+        setting = view.findViewById(R.id.setting);
+        setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(getActivity(), Setting.class);
                 startActivity(intent1);
 
             }

@@ -27,7 +27,7 @@ public class Setting extends AppCompatActivity {
     boolean play_sound, play_music;
     Button confirm;
     int changed_volume;
-    PLayingMusic pLayingMusic;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class Setting extends AppCompatActivity {
         confirm = findViewById(R.id.confirm);
 
         // Access PlayingMusic class
-        pLayingMusic = new PLayingMusic(this);
+
 
         preferences = getSharedPreferences("pref", MODE_PRIVATE);
         int saved_volume = preferences.getInt("volume", 15);
@@ -71,12 +71,10 @@ public class Setting extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
                     play_music = true;
-                    pLayingMusic.stopMusic();
-                    pLayingMusic.playMusic();
+                    AudioPlay.playAudio(getApplicationContext(), R.raw.background);
                 }else{
                     play_music = false;
-                    pLayingMusic.playMusic();
-                    pLayingMusic.stopMusic();
+                    AudioPlay.stopAudio();
                 }
             }
         });
