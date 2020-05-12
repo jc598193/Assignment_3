@@ -83,8 +83,12 @@ public class SecondLandingFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 
-        // Clear new_user data
+        // Clear data
         preferences = getActivity().getSharedPreferences("pref", MODE_PRIVATE);
-        preferences.edit().remove("new_user").apply();
+        preferences.edit()
+                .remove("new_user")
+                .remove("score")
+                .remove("question_number")
+                .apply();
     }
 }

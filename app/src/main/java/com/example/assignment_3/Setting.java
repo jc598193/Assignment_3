@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,7 +51,7 @@ public class Setting extends AppCompatActivity {
 
         volume.setMax(30);
         volume.setProgress(saved_volume);
-
+        volume_value.setText(String.valueOf(saved_volume));
         sound.setChecked(play_sound);
         sound.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -102,10 +101,11 @@ public class Setting extends AppCompatActivity {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int int_volume = Integer.parseInt((String) volume_value.getText());
                 preferences.edit()
                         .putBoolean("play_music", play_music)
                         .putBoolean("play_sound", play_sound)
-                        .putInt("volume", changed_volume)
+                        .putInt("volume", int_volume)
                         .apply();
             }
         });

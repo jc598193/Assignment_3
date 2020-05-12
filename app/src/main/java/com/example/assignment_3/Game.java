@@ -1,17 +1,11 @@
 package com.example.assignment_3;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +13,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 public class Game extends AppCompatActivity {
 
@@ -48,15 +45,14 @@ public class Game extends AppCompatActivity {
         answer2 = findViewById(R.id.answer2);
         answer3 = findViewById(R.id.answer3);
         answer4 = findViewById(R.id.answer4);
-        updateQuestion();
-
 
         preferences = getSharedPreferences("pref", MODE_PRIVATE);
         int saved_score = preferences.getInt("score", 0);
+        question_number = preferences.getInt("question_number", 0);
+        mScore = saved_score;
+
         score.setText(String.valueOf(saved_score));
-
-
-
+        updateQuestion();
 
 
 
@@ -182,6 +178,7 @@ public class Game extends AppCompatActivity {
     // Question Controller
     private void updateQuestion(){
         data = new QuestionDatabase();
+
         if (question_number < 10){
             question.setText(data.getQuestion(question_number));
             image.setImageResource(data.getImage(question_number));
@@ -221,6 +218,13 @@ public class Game extends AppCompatActivity {
         builder1.setMessage("You are completed the game. Do you want to play again?");
         builder1.setCancelable(true);
 
+        preferences = getSharedPreferences("pref", MODE_PRIVATE);
+        preferences.edit()
+                .remove("score")
+                .remove("question_number")
+                .apply();
+        question_number = 0;
+        mScore = 0;
         builder1.setPositiveButton(
                 "Yes",
                 new DialogInterface.OnClickListener() {
@@ -263,9 +267,12 @@ public class Game extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
         preferences = getSharedPreferences("pref", MODE_PRIVATE);
-        preferences.edit().putInt("score", mScore).apply();
+        preferences.edit()
+                .putInt("score", mScore)
+                .putInt("question_number", question_number)
+                .apply();
     }
 }
